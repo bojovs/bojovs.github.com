@@ -1,3 +1,4 @@
 exclude: [Rakefile]
+markdown: kramdown
 permalink: /:year/:month/:day/:title/
 pygments: true
