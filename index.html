@@ -1,0 +1,17 @@
+---
+layout: base
+---
+
+<h1>記事タイトル</h1>
+<ul id="posts">
+  {% for post in site.posts limit:10 %}
+    <li>
+      <span class="datetime">
+        {{ post.date | date: "%Y/%m/%d" }}
+      </span>
+      <div class="title">
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      </div>
+    </li>
+  {% endfor %}
+</ul>

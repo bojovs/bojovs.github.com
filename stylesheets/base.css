@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  line-height: 1.0em; }
+
+body {
+  background-color: #f1f1f1;
+  color: #424241;
+  font-family: "arial", sans-serif;
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto; }
+
+h1 {
+  font-size: 1.2em; }
+
+h2 {
+  font-size: 1.1em; }
+
+h3 {
+  font-size: 1.0em; }
+
+a {
+  text-decoration: none;
+  color: #2c9eee; }
+
+li {
+  /*list-style: inside;*/
+  margin: 0.4em 0; }
+
+header {
+  display: -moz-box;
+  display: -webkit-box;
+  margin: 20px 0 40px 0; }
+  header h1 {
+    font-family: "Merriweather", arial, serif;
+    font-size: 1.5em;
+    width: 150px; }
+    header h1 a {
+      color: #000000;
+      -webkit-transition: color 1s linear; }
+    header h1 a:hover {
+      color: #0d5d9c; }
+  header ul {
+    width: 500px;
+    text-align: right; }
+    header ul li {
+      display: inline;
+      margin: 0 3px; }
+      header ul li a {
+        font-size: 0.9em; }
+
+article h1 {
+  margin-bottom: 35px;
+  color: #e50849; }
+article h2 {
+  margin: 35px 0 25px 0; }
+article h3 {
+  margin: 25px 0 15px 0; }
+article p {
+  line-height: 1.5em;
+  margin: 17px 0;
+  font-size: 1.05em; }
+article code {
+  font-family: "Droid Sans Mono", "arial", sans-serif; }
+article code:not([class]) {
+  background-color: #e2e5e5;
+  font-size: 0.85em; }
+article .highlight {
+  /*background-color: $bgcolor;*/
+  background-color: #fbf8f8;
+  padding: 0 20px;
+  border: solid 1px #e4e4e4; }
+  article .highlight code {
+    line-height: 1.5em;
+    font-size: 14px; }
+article ul {
+  margin: 0 0 0 40px;
+  line-height: 1.5em; }
+article #datetime {
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  color: #9f9f9f;
+  font-weight: bold; }
+article ul#posts, article ul.posts {
+  margin: 25px 0 0 0; }
+  article ul#posts li, article ul.posts li {
+    list-style-type: none;
+    display: -moz-box;
+    display: -webkit-box;
+    margin-bottom: 20px; }
+    article ul#posts li .datetime, article ul.posts li .datetime {
+      margin-right: 7px;
+      color: #9f9f9f;
+      width: 150px; }
+    article ul#posts li .title, article ul.posts li .title {
+      width: 500px; }
+article #categories h1 {
+  font-size: 0.8em;
+  margin: 35px 0 5px 0;
+  color: #424241; }
+article #categories ul {
+  margin: 0;
+  line-height: 1em; }
+  article #categories ul li {
+    display: inline;
+    margin: 0 3px; }
+article #disqus_thread {
+  margin-top: 30px; }
+
+footer {
+  text-align: center;
+  margin: 50px 0 30px 0; }
+  footer li {
+    display: inline;
+    margin: 0 5px; }
+    footer li a {
+      color: #9f9f9f;
+      font-size: 0.9em; }

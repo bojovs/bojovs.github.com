@@ -1,0 +1,31 @@
+---
+layout: nil
+---
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+  <title>bojovs::blog</title>
+  <link href="http://bojovs.github.com"/>
+  <link type="application/atom+xml" rel="self" href="http://bojovs.github.com/atom.xml"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>http://bojovs.github.com</id>
+  <author>
+    <name>Koji Shinba</name>
+    <email>bojovs@gmail.com</email>
+  </author>
+
+  {% for post in site.posts limit:10 %}
+    <entry>
+      <id>http://bojovs.github.com{{ post.id }}/</id>
+      <link type="text/html" rel="alternate" href="http://bojovs.github.com{{ post.url }}"/>
+      <title>{{ post.title }}</title>
+      <updated>{{ post.date | date_to_xmlschema }}</updated>
+      <author>
+        <name>Koji Shinba</name>
+        <uri>http://bojovs.github.com</uri>
+      </author>
+      <content type="html">{{ post.content | xml_escape }}</content>
+    </entry>
+  {% endfor %}
+ 
+</feed>
