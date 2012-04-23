@@ -12,13 +12,13 @@ body {
   margin-right: auto; }
 
 h1 {
-  font-size: 1.2em; }
+  font-size: 1.3em; }
 
 h2 {
-  font-size: 1.1em; }
+  font-size: 1.2em; }
 
 h3 {
-  font-size: 1.0em; }
+  font-size: 1.1em; }
 
 a {
   text-decoration: none;
@@ -50,6 +50,8 @@ header {
       header ul li a {
         font-size: 0.9em; }
 
+article p, article li, article .highlight {
+  font-size: 13px; }
 article h1 {
   margin-bottom: 35px;
   color: #e50849; }
@@ -59,8 +61,7 @@ article h3 {
   margin: 25px 0 15px 0; }
 article p {
   line-height: 1.5em;
-  margin: 17px 0;
-  font-size: 1.05em; }
+  margin: 17px 0; }
 article code {
   font-family: "Droid Sans Mono", "arial", sans-serif; }
 article code:not([class]) {
@@ -69,13 +70,15 @@ article code:not([class]) {
 article .highlight {
   /*background-color: $bgcolor;*/
   background-color: #fbf8f8;
-  padding: 0 20px;
-  border: solid 1px #e4e4e4; }
+  padding: 5 20px;
+  border: solid 1px #e4e4e4;
+  overflow-x: auto;
+  margin: 20px 0; }
   article .highlight code {
     line-height: 1.5em;
-    font-size: 14px; }
+    font-size: 12px; }
 article ul, article ol {
-  margin: 0 0 0 40px;
+  padding-left: 30px;
   line-height: 1.5em; }
 article #datetime {
   margin-bottom: 10px;
