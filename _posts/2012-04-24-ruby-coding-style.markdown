@@ -571,7 +571,7 @@ STATES = %w(draft open closed)
 
 {% highlight ruby %}
 # 悪い例
-hash = { :one => 1, :two => 2, :three => 3 } // 今までのハッシュリテラル
+hash = { :one => 1, :two => 2, :three => 3 } # 今までのハッシュリテラル
 
 # 良い例
 hash = { one: 1, two: 2, three: 3 }
