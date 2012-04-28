@@ -102,8 +102,10 @@ some(arg).other
 
 
 `case` 式と `when` 節のインデントは同じ深さにします。
+ただし、 `case` 式を変数に代入するときは `when` 節に合わせず、単純なインデントで記述します。
 
 {% highlight ruby %}
+# 良い例1
 case
 when song.name == 'Misty'
   puts 'Not again!'
@@ -113,17 +115,32 @@ else
   song.play
 end
 
+# 悪い例 (case式を変数に代入するときは、インデントを同じ深さにしない)
 kind = case year
        when 1850..1889 then 'Blues'
        when 1890..1909 then 'Ragtime'
        else 'Jazz'
        end
+
+# 良い例2
+kind = case year
+  when 1850..1889 then 'Blues'
+  when 1890..1909 then 'Ragtime'
+  else 'Jazz'
+  end
 {% endhighlight %}
 
 **理由:**
 
-* 「[プログラミング言語Ruby](http://www.oreilly.co.jp/books/9784873113944/)」や
-  「[初めてのRuby](http://www.oreilly.co.jp/books/9784873113678/)」がこの形式を使用しているため
+* `case` 式と `when` 節のインデントは同じ深さにする理由:
+  * 「[プログラミング言語Ruby](http://www.oreilly.co.jp/books/9784873113944/)」や
+     「[初めてのRuby](http://www.oreilly.co.jp/books/9784873113678/)」がこの形式を使用しているため。
+* `case` 式を変数に代入するときは `when` 節に合わせない理由:
+  * 変数名が変わったとき、`when` 節以下のインデントも変える必要があるため。
+     詳細は「メソッドに渡すパラメータ」の部分で後述します。
+* 追記 (2012/04/28 19:46): この記事を公開した当初は「悪い例」を良い例としていました。
+  「メソッドに渡すパラメータ」の部分と考え方を統一するため、「良い例2」を追記しました。
+  [m4i](http://bojovs.github.com/2012/04/24/ruby-coding-style/#comment-512139116) さん、ありがとうございます!
 
 
 `def` 式と `def` 式の間には空行を入れ、`def` 式内は論理的にまとまった処理の集まりごとに空行を入れます。
@@ -332,19 +349,33 @@ array.delete(e)
 {% endhighlight %}
 
 
-1行で記述されるブロックには中括弧 `{...}` を使用します。複数行になるときは、`do...end` を使用します。
+1行で記述されるブロックには中括弧 `{...}` を使用します。
+その1行が複雑だったり横に長かったりする場合や、処理を複数行記述するときは、`do...end` を使用します。
 
 {% highlight ruby %}
-names = ["Bozhidar", "Steve", "Sarah"]
+names = ['Bozhidar', 'Steve', 'Sarah']
 
-# 良い例
+# 良い例1
 names.each { |name| puts name }
 
-# 悪い例
+# 悪い例1 (1行で簡潔な処理を do...end 内に記述している)
 names.each do |name|
   puts name
 end
+
+# 悪い例2 (複雑で横に長い処理を1行で記述している)
+names.each { |name| puts sugoku.nagai.shori(fukuzatsu.na.shori(name)) }
+
+# 良い例2 (複雑な処理は複数行に分割する。複数行になるときは do...end を使用する)
+names.each do |name|
+  name = fukuzatsu.na.shori(name)
+  name = sugoku.nagai.shori(name)
+  puts name
+end
 {% endhighlight %}
+
+追記 (2012/04/28 20:40): 「悪い例2」と「良い例2」を追記しました。
+[m4i](http://bojovs.github.com/2012/04/24/ruby-coding-style/#comment-512139116) さん、ありがとうございます!
 
 
 ブロックに対してメソッドチェインするときは、中括弧 `{...}` で囲まれたブロックに対して行います。
@@ -410,16 +441,21 @@ if v == 'hello' ...
 
 * `==` と見分けがつきにくいため
 
-https://github.com/bbatsov/ruby-style-guide では「悪い例1」と「悪い例3」が良い例として書かれていました。
+[https://github.com/bbatsov/ruby-style-guide](https://github.com/bbatsov/ruby-style-guide) では
+「悪い例1」と「悪い例3」が良い例として書かれていました。
 
 
-変数の初期化には `||=` を使用します。
+すでに値が代入されているかもしれない変数の初期化には `||=` を使用します。
 
 {% highlight ruby %}
 name ||= 'Bozhidar'
 {% endhighlight %}
 
-真偽値の初期を行うときは `||=` を使用してはいけません。
+追記 (2012/04/28 20:54):「変数の初期化」から「すでに値が代入されているかもしれない変数の初期化」に修正しました。
+[m4i](http://bojovs.github.com/2012/04/24/ruby-coding-style/#comment-512139116) さん、ありがとうございます!
+
+
+真偽値の初期化を行うときは `||=` を使用してはいけません。
 
 {% highlight ruby %}
 # 悪い例
@@ -678,6 +714,8 @@ STATES = %w(draft open closed)
 **理由:**
 
 * あとで調べる。
+  * 追記 (2012/04/28 20:22): [https://github.com/bbatsov/ruby-style-guide] (https://github.com/bbatsov/ruby-style-guide) に
+     この記述があったので一応書いているんですが、なぜなんでしょうか?
 
 
 メタプログラミング
