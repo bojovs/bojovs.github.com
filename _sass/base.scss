@@ -86,7 +86,7 @@ article {
     margin: 25px 0 15px 0;
   }
   p {
-    line-height: 1.5em;
+    line-height: 18px;
     margin: 17px 0;
   }
   code {
@@ -99,7 +99,7 @@ article {
   .highlight {
     /*background-color: $bgcolor;*/
     background-color: #fbf8f8;
-    padding: 5 20px;
+    padding: 5px 20px;
     border: solid 1px #e4e4e4;
     overflow-x: auto;
     margin: 20px 0;
@@ -112,6 +112,10 @@ article {
   ul, ol {
     padding-left: 30px;
     line-height: 1.5em;
+
+    li {
+      line-height: 18px;
+    }
   }
   #datetime {
     margin-bottom: 10px;

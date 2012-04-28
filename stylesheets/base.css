@@ -60,7 +60,7 @@ article h2 {
 article h3 {
   margin: 25px 0 15px 0; }
 article p {
-  line-height: 1.5em;
+  line-height: 18px;
   margin: 17px 0; }
 article code {
   font-family: "Droid Sans Mono", "arial", sans-serif; }
@@ -70,7 +70,7 @@ article code:not([class]) {
 article .highlight {
   /*background-color: $bgcolor;*/
   background-color: #fbf8f8;
-  padding: 5 20px;
+  padding: 5px 20px;
   border: solid 1px #e4e4e4;
   overflow-x: auto;
   margin: 20px 0; }
@@ -80,6 +80,8 @@ article .highlight {
 article ul, article ol {
   padding-left: 30px;
   line-height: 1.5em; }
+  article ul li, article ol li {
+    line-height: 18px; }
 article #datetime {
   margin-bottom: 10px;
   font-size: 0.9em;
