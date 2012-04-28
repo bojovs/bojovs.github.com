@@ -714,8 +714,8 @@ STATES = %w(draft open closed)
 **理由:**
 
 * あとで調べる。
-  * 追記 (2012/04/28 20:22): [https://github.com/bbatsov/ruby-style-guide] (https://github.com/bbatsov/ruby-style-guide) に
-     この記述があったので一応書いているんですが、なぜなんでしょうか?
+  * 追記 (2012/04/28 20:22): [https://github.com/bbatsov/ruby-style-guide](https://github.com/bbatsov/ruby-style-guide) に
+    この記述があったので一応書いているんですが、なぜなんでしょうか?
 
 
 メタプログラミング
