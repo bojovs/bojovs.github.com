@@ -1,7 +1,7 @@
 ---
-layout: post
+layout: blog
 title: コーディング規約をまとめてみた (Ruby編)
-categories: [ruby]
+tags: ruby
 ---
 
 色々なところで見かけるコーディング規約を見て意識はしているのですが、

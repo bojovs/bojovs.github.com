@@ -1,7 +1,7 @@
 ---
-layout: post
+layout: blog
 title: 匿名でつぶやきが投稿できるWebサービス「Anoside」をリリースしたよ
-categories: [anoside]
+tags: [anoside]
 ---
 
 昨日と今日、以前からちょこちょこと作り続けてきたWebアプリを公開するための作業をしていました。
