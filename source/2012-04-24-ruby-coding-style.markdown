@@ -1,5 +1,5 @@
 ---
-layout: blog
+layout: article
 title: コーディング規約をまとめてみた (Ruby編)
 tags: ruby
 ---

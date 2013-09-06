@@ -69,6 +69,8 @@ configure :build do
   # set :http_path, "/Content/images/"
 end
 
+activate :directory_indexes
+
 activate :blog do |blog|
   blog.permalink = ':year/:month/:day/:title/'
   blog.taglink = 'tags/:tag/'

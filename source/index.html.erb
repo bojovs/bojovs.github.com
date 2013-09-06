@@ -1,20 +1,66 @@
-<h1>記事タイトル</h1>
-<ul id="posts">
-  <% blog.articles[0...5].each do |article| %>
-    <li>
-      <span class="datetime">
-        <%= article.date.strftime('%Y/%m/%d') %>
-      </span>
-      <div class="title">
-        <a href="<%= article.url %>"><%= article.title %></a>
-      </div>
-    </li>
-  <% end %>
-</ul>
+---
+layout: base
+---
 
-<h2>Tags</h2>
-<ol>
-  <% blog.tags.each do |tag, articles| %>
-    <li><%= link_to tag, tag_path(tag) %> (<%= articles.size %>)</a></li>
-  <% end %>
-</ol>
+<div class="container">
+  <div class="background">
+    <div class="images">
+      <img src="/images/background/image1.jpg" alt="背景">
+      <img src="/images/background/image2.jpg" alt="背景">
+      <img src="/images/background/image3.jpg" alt="背景">
+      <img src="/images/background/image4.jpg" alt="背景">
+      <img src="/images/background/image5.jpg" alt="背景">
+    </div>
+    <div class="image-filter"></div>
+  </div>
+  <div class="content">
+    <div class="right pull-right">
+      <img src="/images/bojovs.png" alt="Me" class="img-rounded">
+    </div>
+    <div class="left pull-left">
+      <h1>Koji Shimba</h1>
+      <ul class="sites">
+        <li class="text-center">
+          <a href="/articles/">
+            <i class="icon-pencil"></i>
+          </a>
+        </li>
+        <li class="text-center">
+          <a href="https://twitter.com/bojovs" target="_blank">
+            <i class="icon-twitter"></i>
+          </a>
+        </li>
+        <li class="text-center">
+          <a href="https://github.com/bojovs" target="_blank">
+            <i class="icon-github-alt"></i>
+          </a>
+        </li>
+        <li class="text-center">
+          <a href="http://pinterest.com/bojovs/" target="_blank">
+            <i class="icon-pinterest"></i>
+          </a>
+        </li>
+        <li class="text-center">
+          <a href="http://bojovs.tumblr.com/" target="_blank">
+            <i class="icon-tumblr"></i>
+          </a>
+        </li>
+        <li class="text-center">
+          <a href="http://instagram.com/bojovs" target="_blank">
+            <i class="icon-instagram"></i>
+          </a>
+        </li>
+        <li class="text-center">
+          <a href="http://www.flickr.com/photos/bojovs/" target="_blank">
+            <i class="icon-flickr"></i>
+          </a>
+        </li>
+        <li class="text-center">
+          <a href="https://foursquare.com/bojovs" target="_blank">
+            <i class="icon-foursquare"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

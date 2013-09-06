@@ -1,0 +1,24 @@
+---
+layout: base
+---
+
+<h1>記事タイトル</h1>
+<ul id="posts">
+  <% blog.articles[0...5].each do |article| %>
+    <li>
+      <span class="datetime">
+        <%= article.date.strftime('%Y/%m/%d') %>
+      </span>
+      <div class="title">
+        <a href="<%= article.url %>"><%= article.title %></a>
+      </div>
+    </li>
+  <% end %>
+</ul>
+
+<h2>Tags</h2>
+<ol>
+  <% blog.tags.each do |tag, articles| %>
+    <li><%= link_to tag, tag_path(tag) %> (<%= articles.size %>)</a></li>
+  <% end %>
+</ol>

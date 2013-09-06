@@ -1,5 +1,5 @@
 ---
-layout: blog
+layout: article
 title: VowsとZombie.jsでExpress, MongooseなNode.jsアプリのテストを書いたよ
 tags: [testing, vows, zombie.js]
 ---

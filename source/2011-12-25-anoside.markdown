@@ -1,5 +1,5 @@
 ---
-layout: blog
+layout: article
 title: 匿名でつぶやきが投稿できるWebサービス「Anoside」をリリースしたよ
 tags: [anoside]
 ---
