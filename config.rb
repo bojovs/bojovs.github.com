@@ -70,6 +70,7 @@ configure :build do
 end
 
 activate :directory_indexes
+activate :livereload
 
 activate :blog do |blog|
   blog.permalink = ':year/:month/:day/:title/'
