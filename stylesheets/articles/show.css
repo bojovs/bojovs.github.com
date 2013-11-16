@@ -1,0 +1,25 @@
+/* line 2, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/show.css.scss */
+.articles-show article {
+  line-height: 20px; }
+  /* line 5, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/show.css.scss */
+  .articles-show article h1, .articles-show article h2 {
+    font-weight: bold;
+    margin: 25px 0; }
+  /* line 10, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/show.css.scss */
+  .articles-show article code, .articles-show article ol, .articles-show article p, .articles-show article ul {
+    font-size: 13px; }
+  /* line 14, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/show.css.scss */
+  .articles-show article p {
+    margin: 17px 0; }
+  /* line 18, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/show.css.scss */
+  .articles-show article pre {
+    background-color: #fffffc;
+    color: #647b82;
+    margin: 20px 0;
+    overflow-x: auto; }
+  /* line 25, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/show.css.scss */
+  .articles-show article code {
+    font-family: 'Droid Sans Mono', Consolas, Courier, monospace; }
+  /* line 29, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/show.css.scss */
+  .articles-show article hr.article-end {
+    margin: 30px 0; }

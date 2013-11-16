@@ -1,0 +1,730 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>bojovs.com</title><link href="http://feeds.feedburner.com/bojovs" rel="alternate" type="application/atom+xml"><link href="http://bojovs.com/2012/04/24/ruby-coding-style//" rel="canonical"><link href="/favicon.png" rel="shortcut icon"><link href="/stylesheets/lib/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="/stylesheets/lib/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="/stylesheets/lib/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" media="screen" rel="stylesheet" type="text/css"><link href="/stylesheets/articles.css" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="articles"><nav class="navbar navbar-default" role="navigation"><div class="navbar-header"><a class="navbar-brand" href="/articles/">bojovs::blog</a></div></nav><div class="articles-show"><div class="container"><article class="row"><div class="col-sm-6 col-sm-offset-3"><h1>コーディング規約をまとめてみた (Ruby編)</h1>
+
+<p>色々なところで見かけるコーディング規約を見て意識はしているのですが、
+その時の気分で書き方を変えてしまうことが多々あったので、自戒を込めてコーディング規約をまとめてみました。</p>
+
+<p>「なぜこの規約が存在するか」を明確にするために、できる限り理由も併記しています。
+ただかなり主観的な部分があるので、あまり意味がないかもしれません…。</p>
+
+<p>「この記事のこの規約は気に入らない。」と思うことがきっとあると思います。
+その時はコメント欄などに理由も合わせて書いてくれると嬉しいです。</p>
+
+<p>この記事ではRubyのコーディング規約をまとめています。
+近いうちにRailsとCoffeeScriptのコーディング規約もまとめるつもりです。</p>
+
+<p>Rubyのコーディング規約は以下のページを参考にまとめました。</p>
+
+<ul>
+<li><a href="https://github.com/styleguide/ruby">https://github.com/styleguide/ruby</a></li>
+<li><a href="https://github.com/bbatsov/ruby-style-guide">https://github.com/bbatsov/ruby-style-guide</a></li>
+<li><a href="http://www.loveruby.net/w/RubyCodingStyle.html">http://www.loveruby.net/w/RubyCodingStyle.html</a></li>
+<li><a href="http://shugo.net/ruby-codeconv/codeconv.html">http://shugo.net/ruby-codeconv/codeconv.html</a></li>
+</ul>
+
+<p>ちなみに、Railsのコーディング規約は以下のページを参考にまとめるつもりです。</p>
+
+<ul>
+<li><a href="http://guides.rubyonrails.org/contributing_to_ruby_on_rails.html#follow-the-coding-conventions">http://guides.rubyonrails.org/contributing<em>to</em>ruby<em>on</em>rails.html#follow-the-coding-conventions</a></li>
+<li><a href="https://github.com/bbatsov/rails-style-guide">https://github.com/bbatsov/rails-style-guide</a></li>
+</ul>
+
+<p>この記事はまだ書き終わっておらず、「あとで書く。」などとなっているところがいくつかあります。
+これらは近いうちに追記します。</p>
+
+<h2>前提</h2>
+
+<p>明確な理由がない限り、できるだけ多くのRubyistが採用している書き方でコードを記述します。</p>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>他人の書き方に合わせることで、他人のコードが読みやすくなり、自分のコードも読まれやすくなるため。</li>
+</ul>
+
+<h2>ソースコードレイアウト</h2>
+
+<p>インデントにはスペースを使用し、幅は2とします。</p>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>Ruby界隈ではみんなそうしているため
+
+<ul>
+<li>自動生成されたファイルがスペース/インデント幅2であることが多い</li>
+<li>タブでインデントしていると、それらをその都度タブに置き換える必要がある</li>
+</ul></li>
+<li>GitHubが、タブをインデント幅8としてソースコード表示しているため
+
+<ul>
+<li>GitHub上でソースコードを見るとき、インデントが深すぎて見づらい</li>
+</ul></li>
+</ul>
+
+<p>ファイルのエンコーディングは <code>UTF-8</code> とします。
+一行の桁数は80桁までとします。</p>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>1行にまとめて記述するよりも、複数行に分割して記述したほうが、段階が追いやすく読みやすいため</li>
+<li>1行が長すぎると横にスクロールする必要が出てくるため、読みづらくなる
+
+<ul>
+<li>画面分割などで表示される領域が狭いことがある</li>
+</ul></li>
+</ul>
+
+<h2>シンタックス</h2>
+
+<p>以下の部分にスペースを記述します。</p>
+
+<ul>
+<li>演算子の前後
+
+<ul>
+<li>べき乗の演算子を除く</li>
+</ul></li>
+<li>カンマ、コロン、セミコロンの後ろ</li>
+<li>中括弧( { )の前後</li>
+<li>中括弧( } )の前</li>
+</ul>
+
+<pre><code>sum = 1 + 2 # 演算子の前後
+e = M * c**2 # べき乗の演算子の前後にはスペースを入れない
+a, b = 1, 2 # カンマの後ろ
+1 &gt; 2 ? true : false; puts &#39;Hi&#39; # セミコロンの後ろ
+[1, 2, 3].each { |e| puts e } # 中括弧周辺
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>べき乗の演算子の前後にスペースを入れない理由は、乗算の演算子と見分けやすくするため</li>
+</ul>
+
+<p>以下の部分にはスペースを記述しません。</p>
+
+<ul>
+<li>括弧( ( )、角括弧( [ )の後ろ</li>
+<li>括弧( ) )、角括弧( ] )の前</li>
+</ul>
+
+<pre><code>some(arg).other
+[1, 2, 3].length
+</code></pre>
+
+<p><code>case</code> 式と <code>when</code> 節のインデントは同じ深さにします。
+ただし、 <code>case</code> 式を変数に代入するときは <code>when</code> 節に合わせず、単純なインデントで記述します。</p>
+
+<pre><code># 良い例1
+case
+when song.name == &#39;Misty&#39;
+  puts &#39;Not again!&#39;
+when song.duration &gt; 120
+    puts &#39;Too long!&#39;
+else
+  song.play
+end
+
+# 悪い例 (case式を変数に代入するときは、インデントを同じ深さにしない)
+kind = case year
+       when 1850..1889 then &#39;Blues&#39;
+       when 1890..1909 then &#39;Ragtime&#39;
+       else &#39;Jazz&#39;
+       end
+
+# 良い例2
+kind = case year
+  when 1850..1889 then &#39;Blues&#39;
+  when 1890..1909 then &#39;Ragtime&#39;
+  else &#39;Jazz&#39;
+  end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li><code>case</code> 式と <code>when</code> 節のインデントは同じ深さにする理由:
+
+<ul>
+<li>「<a href="http://www.oreilly.co.jp/books/9784873113944/">プログラミング言語Ruby</a>」や
+「<a href="http://www.oreilly.co.jp/books/9784873113678/">初めてのRuby</a>」がこの形式を使用しているため。</li>
+</ul></li>
+<li><code>case</code> 式を変数に代入するときは <code>when</code> 節に合わせない理由:
+
+<ul>
+<li>変数名が変わったとき、<code>when</code> 節以下のインデントも変える必要があるため。
+詳細は「メソッドに渡すパラメータ」の部分で後述します。</li>
+</ul></li>
+<li>追記 (2012/04/28 19:46): この記事を公開した当初は「悪い例」を良い例としていました。
+「メソッドに渡すパラメータ」の部分と考え方を統一するため、「良い例2」を追記しました。
+<a href="http://bojovs.github.com/2012/04/24/ruby-coding-style/#comment-512139116">m4i</a> さん、ありがとうございます!</li>
+</ul>
+
+<p><code>def</code> 式と <code>def</code> 式の間には空行を入れ、<code>def</code> 式内は論理的にまとまった処理の集まりごとに空行を入れます。</p>
+
+<pre><code>def some_method
+  data = initialize(options)
+
+  data.manipulate!
+
+  data.result
+end
+
+def some_method
+  result
+end
+</code></pre>
+
+<p>メソッドに渡すパラメータは、80桁以上になる場合、メソッド呼び出しの次の行にインデントして表示します。</p>
+
+<pre><code># 悪い例1 (1行が80桁以上。複数行に分割する必要がある)
+def send_mail(source)
+  Mailer.deliver(to: &#39;bob@example.com&#39;, from: &#39;us@example.com&#39;, subject: &#39;Important message&#39;, body: source.text)
+end
+
+# 悪い例2
+def send_mail(source)
+  Mailer.deliver(to: &#39;bob@example.com&#39;,
+                 from: &#39;us@example.com&#39;,
+                 subject: &#39;Important message&#39;,
+                 body: source.text)
+end
+
+# 良い例
+def send_mail(source)
+  Mailer.deliver(
+    to: &#39;bob@example.com&#39;,
+    from: &#39;us@example.com&#39;,
+    subject: &#39;Important message&#39;,
+    body: source.text)
+end
+</code></pre>
+
+<p><a href="https://github.com/bbatsov/ruby-style-guide">https://github.com/bbatsov/ruby-style-guide</a> では、
+「悪い例2」が「good」として紹介されていて、「良い例」が「bad (normal indent)」として紹介されています。
+なぜ「悪い例2」を悪い例としたかというと、</p>
+
+<ul>
+<li>メソッド名などが変わるたびに、その下に記述されているパラメータのインデント数も変わってしまう</li>
+<li>メソッド名の後にパラメータを記述すると、1行が長くなってしまう</li>
+</ul>
+
+<p>ためです。例えば、「悪い例2」のメソッド <code>deliver</code> の名前が <code>deliver_to_me</code> などに変わったとき、
+「悪い例2」のようなインデントの仕方をすると、<code>from</code> から <code>body</code> までの行のインデントも変える必要が出てきます。
+バージョン管理ツールなどでソースコードの変更箇所を記録している場合、
+インデントを直しているだけで記録する必要のない箇所も変更箇所として記録されてしまいます。</p>
+
+<p>メソッド定義のとき、引数が無い場合は括弧を省略し、ある場合は括弧を記述するようにします。</p>
+
+<pre><code>def some_method
+end
+
+def some_method_with_arguments(arg1, arg2)
+end
+</code></pre>
+
+<p>できるだけ <code>for</code> 式を使用せず、<code>each</code> メソッドを使用します。</p>
+
+<pre><code>arr = [1, 2, 3]
+
+# 悪い例
+for elem in arr do
+  puts elem
+end
+
+# 良い例
+arr.each { |elem| puts elem }
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li><code>for</code> 式で使用する変数 (上の例でいう <code>elem</code>) が <code>for</code> 式の外からでも呼び出せてしまうため
+
+<ul>
+<li><code>each</code> メソッドで使用する変数はブロックスコープ内で宣言されるため、ブロックの内側からでしか呼び出せない</li>
+</ul></li>
+</ul>
+
+<p><code>if/unless</code> 式には <code>then</code> を付加せず記述します。</p>
+
+<pre><code># 悪い例
+if some_condition then
+end
+
+# 良い例
+if some_condition
+end
+</code></pre>
+
+<p><code>if/then/else/end</code> が1行で書けるような処理の場合は、代わりに三項演算子を使用します。</p>
+
+<pre><code># 悪い例
+result = if some_condition then something else something_else end
+
+# 良い例
+result = some_condition ? something : something_else
+</code></pre>
+
+<p>三項演算子がネストするようなときは、外側の条件分岐を <code>if/else</code> で記述します。</p>
+
+<pre><code># 悪い例
+some_condition ? (nested_condition ? nested_something : nested_something_else) : something_else
+
+# 良い例
+if some_condition
+  nested_condition ? nested_something : nested_something_else
+else
+  something_else
+end
+</code></pre>
+
+<p><code>if</code> 式の <code>else</code> 句が必要なく、1行で記述できる場合は、後置 <code>if/unless</code> を使用します。</p>
+
+<pre><code># 悪い例
+if some_condition
+end
+
+# 良い例
+do_something if some_condition
+</code></pre>
+
+<p>条件式に否定( ! )は使用せず、<code>unless</code> 式を使用します。</p>
+
+<pre><code># 悪い例
+do_something if !some_condition
+
+# 良い例
+do_something unless some_condition
+</code></pre>
+
+<p><code>unless</code> 式では <code>else</code> 句を使用しません。<code>if</code> 式に書き換えます。</p>
+
+<pre><code># 悪い例
+unless success?
+  puts &#39;failure&#39;
+else
+  puts &#39;success&#39;
+end
+
+# 良い例
+if success?
+  puts &#39;success&#39;
+else
+  puts &#39;failure&#39;
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>ややこしくなるため。</li>
+</ul>
+
+<p><code>if/unless/while</code> 式の条件部には括弧を使用しません。</p>
+
+<pre><code># 悪い例
+if (x &gt; 10)
+end
+
+# 良い例
+if x &gt; 10
+end
+</code></pre>
+
+<p>以下のメソッドには括弧をつけません。その他のメソッドには括弧をつけます。</p>
+
+<ul>
+<li>Rake, Rails, RSpecなどにある内部DSLとなるメソッド (<code>render</code>, <code>response_with</code> など)</li>
+<li>キーワードのように扱われるメソッド (<code>attr_reader</code>, <code>puts</code> など)</li>
+<li>属性のようにアクセスされるメソッド</li>
+</ul>
+
+<pre><code>class Person
+  attr_reader :name, :age
+end
+
+temperance = Person.new(&#39;Temperance&#39;, 30)
+temperance.name
+
+puts temperance.age
+
+x = Math.sin(y)
+array.delete(e)
+</code></pre>
+
+<p>1行で記述されるブロックには中括弧 <code>{...}</code> を使用します。
+その1行が複雑だったり横に長かったりする場合や、処理を複数行記述するときは、<code>do...end</code> を使用します。</p>
+
+<pre><code>names = [&#39;Bozhidar&#39;, &#39;Steve&#39;, &#39;Sarah&#39;]
+
+# 良い例1
+names.each { |name| puts name }
+
+# 悪い例1 (1行で簡潔な処理を do...end 内に記述している)
+names.each do |name|
+  puts name
+end
+
+# 悪い例2 (複雑で横に長い処理を1行で記述している)
+names.each { |name| puts sugoku.nagai.shori(fukuzatsu.na.shori(name)) }
+
+# 良い例2 (複雑な処理は複数行に分割する。複数行になるときは do...end を使用する)
+names.each do |name|
+  name = fukuzatsu.na.shori(name)
+  name = sugoku.nagai.shori(name)
+  puts name
+end
+</code></pre>
+
+<p>追記 (2012/04/28 20:40): 「悪い例2」と「良い例2」を追記しました。
+<a href="http://bojovs.github.com/2012/04/24/ruby-coding-style/#comment-512139116">m4i</a> さん、ありがとうございます!</p>
+
+<p>ブロックに対してメソッドチェインするときは、中括弧 <code>{...}</code> で囲まれたブロックに対して行います。</p>
+
+<pre><code># 良い例
+names.select { |name| name.start_with?(&quot;S&quot;) }.map { |name| name.upcase }
+
+# 悪い例
+names.select do |name|
+  name.start_with?(&quot;S&quot;)
+end.map { |name| name.upcase }
+</code></pre>
+
+<p><code>return</code> が不要なときは記述しません。</p>
+
+<pre><code># 悪い例
+def some_method(some_arr)
+  return some_arr.size
+end
+
+# 良い例
+def some_method(some_arr)
+  some_arr.size
+end
+</code></pre>
+
+<p>メソッドの仮引数に値を代入するとき、<code>=</code> の両端にスペースを入れます。</p>
+
+<pre><code># 悪い例
+def some_method(arg1=:default, arg2=nil, arg3=[])
+end
+
+# 良い例
+def some_method(arg1 = :default, arg2 = nil, arg3 = [])
+end
+</code></pre>
+
+<p><code>if</code> 式の条件部では変数の代入を行いません。</p>
+
+<pre><code># 悪い例1
+if (v = array.grep(/foo/)) ...
+
+# 悪い例2
+if v = array.grep(/foo/) ...
+
+# 悪い例3
+if (v = self.next_value) == &quot;hello&quot; ...
+
+# 良い例
+v = self.next_value
+
+if v == &#39;hello&#39; ...
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li><code>==</code> と見分けがつきにくいため</li>
+</ul>
+
+<p><a href="https://github.com/bbatsov/ruby-style-guide">https://github.com/bbatsov/ruby-style-guide</a> では
+「悪い例1」と「悪い例3」が良い例として書かれていました。</p>
+
+<p>すでに値が代入されているかもしれない変数の初期化には <code>||=</code> を使用します。</p>
+
+<pre><code>name ||= &#39;Bozhidar&#39;
+</code></pre>
+
+<p>追記 (2012/04/28 20:54):「変数の初期化」から「すでに値が代入されているかもしれない変数の初期化」に修正しました。
+<a href="http://bojovs.github.com/2012/04/24/ruby-coding-style/#comment-512139116">m4i</a> さん、ありがとうございます!</p>
+
+<p>真偽値の初期化を行うときは <code>||=</code> を使用してはいけません。</p>
+
+<pre><code># 悪い例
+enabled ||= true
+
+# 良い例
+enabled = true if enabled.nil?
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li><code>nil</code> は偽として扱われないため
+
+<ul>
+<li>追記 (2012/04/24 13:44): 「Rubyで論理値が必要になった場合、<code>nil</code> は <code>false</code> のように振る舞う (プログラミング言語Ruby P.76)」ため、この理由は間違いでした。
+<a href="https://twitter.com/#!/noanoa07/status/194643886067560449">@noanoa07</a> さん、ありがとうございます!</li>
+</ul></li>
+</ul>
+
+<p>メソッド名と開始括弧 ( ( ) の間にスペースを入れてはいけません。もし第一引数で括弧を使用していた場合、メソッドの括弧を必ず入力します。</p>
+
+<pre><code># 悪い例1 (メソッド名と開始括弧の間にスペースが入っている)
+p (3 + 2) + 1
+
+# 悪い例2 (メソッド名と開始括弧の間にスペースは入っていないが、第一引数で括弧が使用されている)
+p(3 + 2) + 1
+
+# 良い例 (第一引数で括弧を使用していた場合、メソッドの括弧を必ず入力する)
+p((3 + 2) + 1)
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>メソッドの括弧なのか引数で使用する括弧なのかを明確にするため
+
+<ul>
+<li>悪い例1と悪い例2とでは実行結果が異なります。</li>
+<li>追記 (2012/04/25 13:22): この記事を公開した当初は、悪い例2を良い例として取り上げていましたが、間違っていたため、書き直しました。
+<a href="https://twitter.com/#!/n0kada/status/194980561813635073">@n0kada</a> さん、ありがとうございます!</li>
+</ul></li>
+</ul>
+
+<p>Ruby 1.9では新しいハッシュ記法を使用します。</p>
+
+<pre><code># 悪い例
+hash = { :one =&gt; 1, :two =&gt; 2 }
+
+# 良い例
+hash = { one: 1, two: 2 }
+</code></pre>
+
+<p>Ruby 1.9では <code>lambda</code> メソッドをリテラルで記述します。</p>
+
+<pre><code># 悪い例
+lambda = lambda { |a, b| a + b }
+lambda.call(1, 2)
+
+# 良い例
+lambda = ->(a, b) { a + b }
+lambda.(1, 2)
+</code></pre>
+
+<p>使用しないブロック引数名は <code>_</code> にします。</p>
+
+<pre><code># 悪い例
+result = hash.map { |k, v| v + 1 }
+
+# 良い例
+result = hash.map { |_, v| v + 1 }
+</code></pre>
+
+<h2>命名ルール</h2>
+
+<p>メソッドと変数には <code>snake_case</code> を使用します。</p>
+
+<p>クラスとモジュールには <code>CamelCase</code> を使用します。
+ただし、HTTP, XMLのような単語の頭文字を取った名前はそのまま全て大文字にします。</p>
+
+<p>定数には <code>SCREAMING_SNAKE_CASE</code> を使用します。</p>
+
+<p>返り値が真偽値のメソッドは、<code>Array#empty?</code> のように、名前の最後に <code>?</code> を付加します。</p>
+
+<p><code>self</code> を書き換えるような破壊的なメソッドの名前には、最後に <code>!</code> を付加します。</p>
+
+<p>破壊的なメソッドを定義したとき、可能であれば、同じ返り値を返す非破壊的なメソッドも定義します。</p>
+
+<pre><code>class Array
+  def flatten_once!
+    res = []
+
+    each do |e|
+      [*e].each { |f| res &lt;&lt; f }
+    end
+
+    replace(res)
+  end
+
+  def flatten_once
+    dup.flatten_once!
+  end
+end
+</code></pre>
+
+<p>エイリアスが存在するメソッドは、どちらか一方を使用します。例えば、</p>
+
+<ul>
+<li><code>collect</code> より <code>map</code></li>
+<li><code>detect</code> より <code>find</code></li>
+<li><code>find_all</code> より <code>select</code></li>
+<li><code>inject</code> より <code>reduce</code></li>
+<li><code>length</code> より <code>size</code></li>
+</ul>
+
+<h2>コメント</h2>
+
+<p>あとで書く。</p>
+
+<h2>注釈</h2>
+
+<p>あとで書く。</p>
+
+<h2>クラス</h2>
+
+<p>あとで書く。</p>
+
+<h2>例外</h2>
+
+<p>あとで書く。</p>
+
+<h2>配列、ハッシュ</h2>
+
+<p>文字列が格納されるだけの配列の場合は、 <code>%w</code> を使用します。</p>
+
+<pre><code># 悪い例
+STATES = [&#39;draft&#39;, &#39;open&#39;, &#39;closed&#39;]
+
+# 良い例
+STATES = %w(draft open closed)
+</code></pre>
+
+<p>ハッシュはRuby 1.9から追加されたリテラルを使用して記述します。</p>
+
+<pre><code># 悪い例
+hash = { :one =&gt; 1, :two =&gt; 2, :three =&gt; 3 } # 今までのハッシュリテラル
+
+# 良い例
+hash = { one: 1, two: 2, three: 3 }
+</code></pre>
+
+<h2>文字列</h2>
+
+<p>文字列の結合は使用せず、式展開を使用します。</p>
+
+<pre><code># 悪い例
+email_with_name = user.name + &#39; &lt;&#39; + user.email + &#39;&gt;&#39;
+
+# 良い例
+email_with_name = &quot;#{user.name} &lt;#{user.email}&gt;&quot;
+</code></pre>
+
+<p>式展開やバックスラッシュ記法( <code>\t</code> や <code>\n</code> など) を使用しない場合はシングルクォートを使用します。</p>
+
+<pre><code># 悪い例
+name = &quot;Bozhidar&quot;
+
+# 良い例
+name = &#39;Bozhidar&#39;
+</code></pre>
+
+<p>大きな文字列を結合する場合は、<code>String#+</code> を使用せず <code>String#&lt;&lt;</code> を使用します。</p>
+
+<pre><code>html = &#39;&#39;
+html &lt;&lt; &#39;&lt;h1&gt;Page title&lt;/h1&gt;&#39;
+
+paragraphs.each do |paragraph|
+  html &lt;&lt; &quot;&lt;p&gt;#{paragraph}&lt;/p&gt;&quot;
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li><code>String#+</code> は非破壊的なメソッドであるため。<code>String#+</code> は文字列結合するたびに新しい文字列を生成する。
+そのため、<code>String#&lt;&lt;</code> のほうが速い。</li>
+</ul>
+
+<h2>正規表現</h2>
+
+<p>あとで書く。</p>
+
+<h2>パーセント記法</h2>
+
+<p>配列の中に文字列のみが含まれている場合は <code>%w</code> を使用します。</p>
+
+<pre><code>STATES = %w(draft open closed)
+</code></pre>
+
+<p>1行で記述できる文字列で、ダブルクォートと式展開を両方使用している場合は <code>%()</code> を使用します。
+複数行に渡る場合はヒアドキュメントを使用します。</p>
+
+<pre><code># 悪い例 (ダブルクォートが記述されていない)
+%(This is #{quality} style)
+# &quot;This is #{quality} style&quot; が好ましい
+
+# 悪い例 (式展開が記述されていない)
+%(&lt;div class=&quot;text&quot;&gt;Some text&lt;/div&gt;)
+# &#39;&lt;div class=&quot;text&quot;&gt;Some text&lt;/div&gt;&#39; が好ましい
+
+# 悪い例 (ダブルクォートが記述されていない)
+%(This is #{quality} style)
+# &quot;This is #{quality} style&quot; が好ましい
+
+# 悪い例 (複数行の文字列になっている)
+%(&lt;div&gt;\n&lt;span class=&quot;big&quot;&gt;#{exclamation}&lt;/span&gt;\n&lt;/div&gt;)
+# ヒアドキュメントを使用するのが好ましい
+
+# 良い例 (ダブルクォートと式展開が記述されている)
+%(&lt;tr&gt;&lt;td class=&quot;name&quot;&gt;#{name}&lt;/td&gt;)
+</code></pre>
+
+<p><code>%q</code> , <code>%Q</code> , <code>%x</code> , <code>%s</code> , <code>%W</code> は使用してはいけません。</p>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>あとで調べる。
+
+<ul>
+<li>追記 (2012/04/28 20:22): <a href="https://github.com/bbatsov/ruby-style-guide">https://github.com/bbatsov/ruby-style-guide</a> に
+この記述があったので一応書いているんですが、なぜなんでしょうか?</li>
+</ul></li>
+</ul>
+
+<h2>メタプログラミング</h2>
+
+<p>あとで書く。</p>
+
+<h2>その他</h2>
+
+<p>オプション引数としてハッシュを使用するのは極力避けます。</p>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>オプション引数が必要になるメソッドは、そのメソッドの中でいろいろなことをやり過ぎていることが多いため。
+メソッドを複数個宣言し、処理を分けたほうが良い。</li>
+</ul>
+
+<p>不要なメタプログラミングは避けます。</p>
+<hr class="article-end"><div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'bojovs'; // required: replace example with your forum shortname
+  var disqus_identifier = "http://bojovs.com/2012/04/24/ruby-coding-style//";
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div></article></div></div><hr><footer><p class="text-center">bojovs.com</p></footer></div><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-7047321-10']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<script src="/javascripts/lib/jquery.min.js" type="text/javascript"></script><script src="/javascripts/lib/jquery.easing.js" type="text/javascript"></script><script src="/javascripts/lib/bootstrap.min.js" type="text/javascript"></script><script src="/javascripts/application.js" type="text/javascript"></script></body></html>

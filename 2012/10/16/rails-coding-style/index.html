@@ -1,0 +1,508 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>bojovs.com</title><link href="http://feeds.feedburner.com/bojovs" rel="alternate" type="application/atom+xml"><link href="http://bojovs.com/2012/10/16/rails-coding-style//" rel="canonical"><link href="/favicon.png" rel="shortcut icon"><link href="/stylesheets/lib/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="/stylesheets/lib/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="/stylesheets/lib/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" media="screen" rel="stylesheet" type="text/css"><link href="/stylesheets/articles.css" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="articles"><nav class="navbar navbar-default" role="navigation"><div class="navbar-header"><a class="navbar-brand" href="/articles/">bojovs::blog</a></div></nav><div class="articles-show"><div class="container"><article class="row"><div class="col-sm-6 col-sm-offset-3"><h1>コーディング規約をまとめてみた (Rails編)</h1>
+
+<p>半年ほど前に書いた「<a href="http://bojovs.github.com/2012/04/24/ruby-coding-style/">コーディング規約をまとめてみた (Ruby編)</a>」に引き続き、Railsのコーディング規約もまとめてみました。前回と同じように、できるだけ理由を併記するよう努めました (主観的なものも含まれていますが…)。</p>
+
+<p>気に入らない規約や、この記事に書かれている規約以外にも気をつけていることなどありましたら、コメントなどで教えてもらえると嬉しいです (理由も合わせて書いてくれると助かります)。</p>
+
+<p>Railsのコーディング規約は以下のページを参考にまとめています。</p>
+
+<ul>
+<li><a href="http://guides.rubyonrails.org/contributing_to_ruby_on_rails.html#follow-the-coding-conventions">http://guides.rubyonrails.org/contributing<em>to</em>ruby<em>on</em>rails.html#follow-the-coding-conventions</a></li>
+<li><a href="https://github.com/bbatsov/rails-style-guide">https://github.com/bbatsov/rails-style-guide</a></li>
+</ul>
+
+<h2>前提</h2>
+
+<p>コード例は「<a href="http://bojovs.github.com/2012/04/24/ruby-coding-style/">コーディング規約をまとめてみた (Ruby編)</a>」をベースに記述します。</p>
+
+<h3>Railsのバージョン</h3>
+
+<p>バージョン3.2系を対象にしています。</p>
+
+<h2>ルーティング</h2>
+
+<p>RESTfulなリソース(<code>resources</code> メソッドを使用したルーティング)に対して新たにrouteを追加する場合は、<code>member</code> や <code>collection</code> を使用します。</p>
+
+<pre><code class="ruby"># 悪い例
+get &#39;subscriptions/:id/unsubscribe&#39;
+resources :subscriptions
+
+# 良い例
+resources :subscriptions do
+  get &#39;unsubscribe&#39;, on: :member
+end
+
+# 悪い例
+get &#39;photos/search&#39;
+resources :photos
+
+# 良い例
+resources :photos do
+  get &#39;search&#39;, on: :collection
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li><code>resources</code> メソッドのブロック内に記述することで、追加するrouteがそのリソースに結びついているということが明確になるため。</li>
+</ul>
+
+<p><code>member</code> , <code>collection</code> ルーティングを複数定義する場合は、ブロック内に記述します。</p>
+
+<pre><code class="ruby">resources :subscriptions do
+  member do
+    post &#39;subscribe&#39;
+    post &#39;unsubscribe&#39;
+  end
+end
+
+resources :photos do
+  collection do
+    get &#39;explore&#39;
+    get &#39;search&#39;
+  end
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>重複部分がなくなり、見た目がすっきりするため。</li>
+</ul>
+
+<p><strong>コメント:</strong></p>
+
+<ul>
+<li><a href="https://github.com/thoughtbot/guides/tree/master/style#rails">thoughtbotのプログラミングガイド</a>に、&quot;Avoid member and collection routes.&ldquo; と書かれているのですが、これは何故なんでしょう…?</li>
+</ul>
+
+<p>「Nested routes」は、各モデルの関係を表現するために使用します。</p>
+
+<pre><code class="ruby">class Post &lt; ActiveRecord::Base
+  has_many :comments
+end
+
+class Comments &lt; ActiveRecord::Base
+  belongs_to :post
+end
+
+# routes.rb
+resources :posts do
+  resources :comments
+end
+</code></pre>
+
+<p>「Namespaced routes」は、関係するroutesをグルーピングするために使用します。</p>
+
+<pre><code class="ruby">namespace :admin do
+  resources :products
+end
+</code></pre>
+
+<p>「Legacy wild controller route」は使用してはいけません。</p>
+
+<pre><code class="ruby"># ダメ! ゼッタイ!
+match &#39;:controller(/:action(/:id(.:format)))&#39;
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>RESTfulでなくなるため。
+
+<ul>
+<li>コントローラ内の全てのアクションにGETメソッドでアクセスできてしまう。</li>
+</ul></li>
+</ul>
+
+<h2>コントローラ</h2>
+
+<p>コントローラ内に複雑なビジネスロジックを記述してはいけません。
+ビジネスロジックはモデルやヘルパーに記述し、コントローラ内はリクエストからレスポンスまでの一連の流れを簡潔に表現するようにします。</p>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>そのアクションがどのようなことをするのかが理解しやすくなるため。</li>
+<li>ビジネスロジックのテストがやりやすくなるため。</li>
+</ul>
+
+<h2>モデル</h2>
+
+<p><code>has_many</code>, <code>validates</code> などのクラスメソッドは、モデル定義の最初の部分に記述します。</p>
+
+<pre><code class="ruby"># 悪い例 (クラスメソッドがメソッド宣言のあとに呼び出されている)
+class User &lt; ActiveRecord::Base
+  def follow
+  end
+
+  has_and_belongs_to_many :groups
+end
+
+# 良い例 (クラスメソッドの呼び出しはモデル定義の最初の部分で行う)
+class User &lt; ActiveRecord::Base
+  has_and_belongs_to_many :groups
+
+
+  def follow
+  end
+end
+</code></pre>
+
+<p>各クラスメソッドは機能ごとに一定の順番で記述します。</p>
+
+<pre><code class="ruby">class User &lt; ActiveRecord::Base
+  # 1番目にアクセッサ関連のクラスメソッドを呼び出す
+  attr_accessor :type
+  attr_accessible :name, :type
+
+  # 2番目にアソシエーション関連のクラスメソッドを呼び出す
+  has_and_belongs_to_many :groups
+  has_many :posts
+
+  # 3番目にバリデーション関連のクラスメソッドを呼び出す
+  validates :name, presence: true
+
+  # 4番目にNamed scopeを呼び出す
+  scope :deleted, where(deleted: true)
+
+  # 5番目に外部ライブラリのクラスメソッドを呼び出す
+  # 各外部ライブラリごとに1行空白行を挿入する
+  devise :database_authenticatable, :rememberable, :trackable
+
+  has_attached_file :avatar
+
+  # 6番目に before_validation などの、ブロック内が複数行になりうるクラスメソッドを呼び出す
+  before_validation do
+  end
+
+
+  # 7番目にクラスメソッドを定義する
+  # クラスメソッドの呼び出しと定義の間には2行分の空白行を挿入する
+  def self.find_by_full_name
+  end
+
+  # 8番目にインスタンスメソッドを定義する
+  def full_name
+  end
+end
+</code></pre>
+
+<p>同じ名前のクラスメソッドは一つにまとめて呼び出します。そのとき、アルファベット順で呼び出します。</p>
+
+<pre><code class="ruby"># 悪い例1 (2つのhas_manyが一箇所で呼び出されていない)
+class User &lt; ActiveRecord::Base
+  has_many :comments
+  has_and_belongs_to_many :groups
+  has_many :posts
+end
+
+# 良い例1 (2つのhas_manyが一箇所で呼び出されている)
+class User &lt; ActiveRecord::Base
+  has_and_belongs_to_many :groups
+  has_many :comments
+  has_many :posts
+end
+
+# 悪い例2 (has_and_belongs_to_manyがhas_manyのあとで呼び出されている)
+class User &lt; ActiveRecord::Base
+  has_many :comments
+  has_many :posts
+  has_and_belongs_to_many :groups
+end
+
+# 良い例2 (「has_」のあとはそれぞれ「m」と「a」なので、アルファベット順に並べると
+# has_and_belongs_to_manyがhas_manyより前に来る)
+class User &lt; ActiveRecord::Base
+  has_and_belongs_to_many :groups
+  has_many :comments
+  has_many :posts
+end
+
+# 悪い例3 (「:posts」が「:comments」の前で呼び出されている)
+class User &lt; ActiveRecord::Base
+  has_and_belongs_to_many :groups
+  has_many :posts
+  has_many :comments
+end
+
+# 良い例3 (アルファベット順に並べると(ry )
+class User &lt; ActiveRecord::Base
+  has_and_belongs_to_many :groups
+  has_many :comments
+  has_many :posts
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>そのモデルにどのようなことができるのかが把握しやすくするため。
+
+<ul>
+<li>書いてある場所が予測しやすくなる</li>
+</ul></li>
+<li>どこに書けば良いかという迷いを無くすため。</li>
+<li>各クラスメソッドの機能ごとの呼び出しの順番は、GitHub上で一番Starが付けられているRailsアプリケーションである
+<a href="https://github.com/diaspora/diaspora">Diaspora</a> のモデル定義を参考にしました。
+
+<ul>
+<li>アルファベット順に並べることで、全員が同じ場所でそのクラスメソッドを呼び出すようになると思います。</li>
+</ul></li>
+</ul>
+
+<p>できるだけ <code>has_and_belongs_to_many</code> は使用せず、 <code>has_many :through</code> を使用します。</p>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>外部キー以外のフィールドも追加することができるため。</li>
+<li>中間テーブル上でバリデーションの設定ができるため。</li>
+</ul>
+
+<p><code>validates_presence_of</code> などの古いバリデーションメソッドは使用せず、<a href="http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/">&quot;sexy validations&rdquo;</a> を使用します。</p>
+
+<pre><code class="ruby"># 悪い例
+class User &lt; ActiveRecord::Base
+  validates_presence_of :email, :name
+end
+
+# 良い例
+class User &lt; ActiveRecord::Base
+  validates :email, presence: true
+  validates :name, presence: true
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>そのフィールドに付加するバリデーションの設定が1行で記述できるため。
+
+<ul>
+<li>読む側も1行だけ見るだけでそのフィールドに設定されている全てのバリデーション内容が把握できます</li>
+</ul></li>
+</ul>
+
+<p>独自のバリデーションを複数回呼び出すときや正規表現を使用するバリデーションを設定したいときは、独自のバリデーション用のクラスを定義します。</p>
+
+<pre><code class="ruby"># 悪い例
+class Person
+  validates :email, format: { with: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i }
+end
+
+# 良い例
+class EmailValidator &lt; ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    record.errors[attribute] &lt;&lt; (options[:message] || &#39;is not a valid email&#39;) unless value =~ /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+  end
+end
+
+class Person
+  validates :email, email: true
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>そのバリデーションルールが何を意味しているのかがわかりやすくなるため。</li>
+</ul>
+
+<p>独自のバリデーションはそのバリデーションのクラスごとにファイルを作成し、<code>app/validators</code> ディレクトリ以下に格納します。</p>
+
+<pre><code>app/validators
+├── email_validator.rb
+└── phone_number_validator.rb
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>特にありません。。
+
+<ul>
+<li>皆さんどこに置いているのでしょうか?</li>
+<li><a href="http://stackoverflow.com/questions/5263239/where-should-rails-3-custom-validators-be-stored">この辺り</a>を見ると、<code>lib</code> ディレクトリ以下に置くか <code>app</code> ディレクトリ以下に置くかで意見が分かれているようです。</li>
+</ul></li>
+</ul>
+
+<p>データの検索を行う処理を実装するときは、クラスメソッドを定義せず、Named scopeを使用します。引数が必要な場合は、Ruby 1.9から導入されたlambdaメソッドの省略記法 <code>-></code> を使用します。</p>
+
+<pre><code class="ruby"># 悪い例1 (クラスメソッドを定義している)
+def self.published
+  where(published: true)
+end
+
+# 良い例1
+scope :published, where(published: true)
+
+# 悪い例2-1 (クラスメソッドを定義している)
+def self.liked_by(person)
+  joins(:likes).where(likes: { author_id: person.id })
+end
+
+# 悪い例2-2 (lambdaメソッドの省略記法を使用していない)
+scope :liked_by, lambda { |person|
+  joins(:likes).where(:likes =&gt; {:author_id =&gt; person.id})
+}
+
+# 良い例2 (省略記法を使用したほうがタイプ数も少なくすっきりしていて見やすい)
+scope :liked_by, -> person {
+  joins(:likes).where(likes: { author_id: person.id })
+}
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>データを検索する処理とデータを操作する処理の見分けが付きやすくなるため。
+
+<ul>
+<li><strong>データを検索する処理:</strong> Named scopeで定義</li>
+<li><strong>データを操作する処理:</strong> クラスメソッドで定義</li>
+</ul></li>
+</ul>
+
+<p><strong>コメント:</strong></p>
+
+<p><strong>更新 (2012/10/16 20:32):</strong> Rails 4.0から <code>lambda</code> メソッドを使用する記述方法が推奨されます (<a href="http://edgeguides.rubyonrails.org/4_0_release_notes.html#active-record">Ruby on Rails 4.0 Release Notes - &ldquo;Deprecate eager-evaluated scopes.&rdquo;</a>)。
+「良い例1」は、4.0以降では以下のように記述します。(@pinzolo さんありがとうございます! )</p>
+
+<pre><code class="ruby"># 良い例1-1 (Rails 4.0から)
+scope :published, -> { where(published: true) }
+</code></pre>
+
+<p>モデル内に定義するメソッドは、データを操作するメソッドか、データそのものを返すようにします。それ以外の値を返すときは、ヘルパーやデコレータ (<a href="https://github.com/amatsuda/active_decorator">ActiveDecorator</a> など) を使用します。</p>
+
+<pre><code class="ruby">class User &lt; ActiveRecord::Base
+  # 悪い例
+  # データベースからの値にビューで表示する上で必要なものを付加したい場合は
+  # デコレータに記述します
+  def full_name
+    first_name + last_name + &#39;さん&#39;
+  end
+
+  # 良い例
+  def full_name
+    first_name + last_name
+  end
+end
+</code></pre>
+
+<h2>マイグレーション</h2>
+
+<p>マイグレーションの記述には、Rails 3.1から導入された <code>change</code> メソッドを使用します。</p>
+
+<pre><code class="ruby"># 悪い例
+class CreateProducts &lt; ActiveRecord::Migration
+  def up
+    create_table :products do |t|
+      t.string :name
+      t.text :description
+
+      t.timestamps
+    end
+  end
+
+  def down
+    drop_table :products
+  end
+end
+
+# 良い例
+class CreateProducts &lt; ActiveRecord::Migration
+  def change
+    create_table :products do |t|
+      t.string :name
+      t.text :description
+
+      t.timestamps
+    end
+  end
+end
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li>ロールバックするためのメソッド (<code>down</code>メソッド) を記述する必要がなくなるため</li>
+</ul>
+
+<h2>ビュー</h2>
+
+<p>ビュー内にビジネスロジックを記述してはいけません。ヘルパーやモデルに記述するようにします。</p>
+
+<h2>Assets</h2>
+
+<p>自作のライブラリは <code>lib/assets</code> ディレクトリ以下に配置します。</p>
+
+<p>jQueryやUnderscore.jsなどの外部ライブラリは <code>vendor/assets</code> ディレクトリ以下に配置します。</p>
+
+<h2>Action Mailer</h2>
+
+<p>メール本文内にサイトのURLを表示したいときは、<code>_path</code> メソッドではなく <code>_url</code> メソッドを使用します。</p>
+
+<pre><code class="ruby"># 悪い例
+You can always find more info about this course
+= link_to &#39;here&#39;, url_for(course_path(@course))
+
+# 良い例
+You can always find more info about this course
+= link_to &#39;here&#39;, url_for(course_url(@course))
+</code></pre>
+
+<p><strong>理由:</strong></p>
+
+<ul>
+<li><code>_url</code> メソッドはホスト名も返すため。
+
+<ul>
+<li>開発環境とプロダクション環境の両方で同じコードが利用できる</li>
+</ul></li>
+</ul>
+
+<p><strong>追記 (2012/10/16 22:03):</strong></p>
+
+<p>各方面からいくつかコメントを頂きました。ありがとうございます!</p>
+
+<p><a href="http://b.hatena.ne.jp/ntaoo/">id: ntaoo</a> さん:「rails guideには引数付きのscopeを定義するよりクラスメソッドにするほうがprefered wayだよと書いてあったような。」</p>
+
+<p>確かに &ldquo;<a href="http://guides.rubyonrails.org/active_record_querying.html#passing-in-arguments">Ruby on Rails Guides の &quot;13.2 Passing in arguments&rdquo;</a>&ldquo; の項に以下のように書いてありました…。知りませんでした…。</p>
+
+<pre><code>&quot;Using a class method is the preferred way to accept arguments for scopes.&quot;
+</code></pre>
+
+<p>ただ、引数を要するかどうかを問わず、 <code>ActiveRecord::Relation</code> オブジェクトを返す処理は <code>scope</code> で、それ以外はクラスメソッドで定義する、というように区別したほうが、どのメソッドがクエリメソッドとしてchainableなのかが判別しやすいかも知れません。</p>
+
+<p><a href="https://twitter.com/deeeki">@deeeki</a> さん:「クラスマクロ呼び出しでなぜその順番が妥当かという理由もあれば知りたいところ」</p>
+
+<p><a href="https://github.com/diaspora/diaspora">Diaspora</a> が大体こんな順番で書いているということ以外、特に理由はありません。。
+なぜDiasporaがこの順番で書いているのか。推測ですが、「よく定義するクラスメソッド順」で書いたのではないかと考えています。上のほうで定義されているクラスメソッドほどよく定義している気がします。</p>
+<hr class="article-end"><div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'bojovs'; // required: replace example with your forum shortname
+  var disqus_identifier = "http://bojovs.com/2012/10/16/rails-coding-style//";
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div></article></div></div><hr><footer><p class="text-center">bojovs.com</p></footer></div><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-7047321-10']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<script src="/javascripts/lib/jquery.min.js" type="text/javascript"></script><script src="/javascripts/lib/jquery.easing.js" type="text/javascript"></script><script src="/javascripts/lib/bootstrap.min.js" type="text/javascript"></script><script src="/javascripts/application.js" type="text/javascript"></script></body></html>

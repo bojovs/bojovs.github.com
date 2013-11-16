@@ -1,0 +1,14 @@
+/* line 1, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/base.css.scss */
+body {
+  background-color: #f8fbf8;
+  color: #595857; }
+
+/* line 6, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/base.css.scss */
+h1 {
+  font-size: 25px;
+  margin: 20px 0; }
+
+/* line 11, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/articles/base.css.scss */
+h2 {
+  font-size: 20px;
+  font-weight: bold; }

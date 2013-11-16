@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>bojovs.com</title><link href="http://feeds.feedburner.com/bojovs" rel="alternate" type="application/atom+xml"><link href="http://bojovs.com/2011/09/30/vows-zombie//" rel="canonical"><link href="/favicon.png" rel="shortcut icon"><link href="/stylesheets/lib/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="/stylesheets/lib/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="/stylesheets/lib/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css" /><link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono" media="screen" rel="stylesheet" type="text/css"><link href="/stylesheets/articles.css" media="screen" rel="stylesheet" type="text/css" /></head><body><div class="articles"><nav class="navbar navbar-default" role="navigation"><div class="navbar-header"><a class="navbar-brand" href="/articles/">bojovs::blog</a></div></nav><div class="articles-show"><div class="container"><article class="row"><div class="col-sm-6 col-sm-offset-3"><h1>VowsとZombie.jsでExpress, MongooseなNode.jsアプリのテストを書いたよ</h1>
+
+<h2>環境</h2>
+
+<ul>
+<li>Node.js 0.4.9</li>
+<li><a href="http://expressjs.com/">Express</a> 2.4.6</li>
+<li><a href="http://mongoosejs.com/">Mongoose</a> 2.2.2</li>
+<li><a href="http://vowsjs.org/">Vows</a> 0.5.11</li>
+<li><a href="http://zombie.labnotes.org/">Zombie.js</a> 0.10.1</li>
+<li><a href="https://github.com/mikeal/request">request</a> 2.1.1</li>
+</ul>
+
+<h2>流れ</h2>
+
+<p>最初に、モデル内のドキュメントを削除するコードと、サーバを起動するコードを記述します。</p>
+
+<p><strong>test/helper.js</strong></p>
+
+<pre><code>var mongoose = require(&#39;mongoose&#39;)
+  , app = require(&#39;../app&#39;)
+  , Post    = require(&#39;../models/post&#39;).Post
+  , User    = require(&#39;../models/user&#39;).User;
+
+var serverActivity = false
+  , models = [Post, User];
+
+
+process.on(&#39;exit&#39;, function () {
+  // サーバが起動していたら終了する
+  if (serverActivity) {
+    app.close();
+  }
+});
+
+module.exports = {
+
+  /**
+   * 配列modelsに入っているドキュメントを全て削除する
+   */
+
+  initDB: function initDB(callback, count) {
+    var cnt = count || 0;
+    models[cnt].remove(function () {
+      cnt += 1;
+      if (cnt === models.length) {
+        callback();
+      } else {
+        initDB(callback, cnt);
+      }
+    });
+  },
+
+  /**
+   * サーバが起動していなかったら起動する
+   */
+
+  readyServer: function (callback) {
+    if (serverActivity) {
+      process.nextTick(callback);
+    } else {
+      serverActivity = true;
+      app.listen(3030, function () {
+        process.nextTick(callback);
+      });
+    }
+    return;
+  }
+};
+</code></pre>
+
+<p>次に、実際にテストを書いていきます。</p>
+
+<p><strong>test/controllers/posts.test.js</strong></p>
+
+<pre><code>var assert  = require(&#39;assert&#39;)
+  , request = require(&#39;request&#39;)
+  , vows    = require(&#39;vows&#39;)
+  , zombie  = require(&#39;zombie&#39;)
+  , helper = require(&#39;../helper&#39;)
+  , Post = require(&#39;../../models/post&#39;).Post;
+
+var url = &#39;http://localhost:3030&#39;;
+
+
+vows.describe(&#39;posts&#39;).addBatch({
+  &#39;GET /&#39;: {
+    topic: function () {
+      helper.readyServer(this.callback);
+    },
+    &#39;after readyServer&#39;: {
+      topic: function () {
+        request(url + &#39;/&#39;, this.callback);
+      },
+      &#39;should response 200&#39;: function (err, res, body) {
+        assert.equal(res.statusCode, 200);
+      }
+    }
+  },
+
+  &#39;GET /posts&#39;: {
+    topic: function () {
+      helper.initDB(this.callback);
+    },
+    &#39;after initDB&#39;: {
+      topic: function () {
+        var post = new Post({ title: &#39;hello world&#39; });
+        post.save(this.callback);
+      },
+      &#39;after saving post&#39;: {
+        topic: function (err, post) {
+          helper.readyServer(this.callback);
+        },
+        &#39;after readyServer&#39;: {
+          topic: function () {
+            zombie.visit(url + &#39;/posts&#39;, this.callback);
+          },
+          &#39;should display the post&#39;: function (err, browser, status) {
+            assert.equal(browser.text(&#39;ul#posts li&#39;), &#39;hello world&#39;);
+          }
+        }
+      }
+    }
+  }
+}).export(module);
+</code></pre>
+
+<p>12行目から24行目までは、</p>
+
+<ol>
+<li>サーバを起動して</li>
+<li><a href="http://localhost:3030/">http://localhost:3030/</a> にアクセスしたら</li>
+<li>200 が返ってくるべき</li>
+</ol>
+
+<p>という処理になっています。26行目から49行目までは、</p>
+
+<ol>
+<li>データベースを初期化して</li>
+<li>タイトルが「hello world」なポストを保存して</li>
+<li>サーバを起動したあとに</li>
+<li><a href="http://localhost:3030/posts%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%97%E3%81%9F%E3%82%89">http://localhost:3030/postsにアクセスしたら</a></li>
+<li>リスト内に「hello world」が表示されているべき</li>
+</ol>
+
+<p>という処理になっています。</p>
+
+<p>Vowsでは、<code>topic</code> という関数の中で <code>this.callback</code> という関数を使うことができます。
+この関数を、<code>helper.initDB</code> や <code>helper.readyServer</code> などのコールバック関数を引数に持つ関数に渡し、
+その下にさらに <code>topic</code> 関数をネストして記述することで、非同期的な命令を順番に処理させることができるようです。</p>
+
+<p>ただ、結構冗長なコードになっているので、もう少し簡潔に書けないかなあと思っています。
+みんなはどうしているんだろう…。</p>
+<hr class="article-end"><div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'bojovs'; // required: replace example with your forum shortname
+  var disqus_identifier = "http://bojovs.com/2011/09/30/vows-zombie//";
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div></article></div></div><hr><footer><p class="text-center">bojovs.com</p></footer></div><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-7047321-10']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<script src="/javascripts/lib/jquery.min.js" type="text/javascript"></script><script src="/javascripts/lib/jquery.easing.js" type="text/javascript"></script><script src="/javascripts/lib/bootstrap.min.js" type="text/javascript"></script><script src="/javascripts/application.js" type="text/javascript"></script></body></html>
