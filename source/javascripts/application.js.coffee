@@ -37,20 +37,29 @@ if $('.home-index').length
   ]
 
   transitImage = ($image) ->
-    $image.appendTo($images).css(opacity: 0)
+    $image.imagesLoaded ->
+      $image.appendTo($images).css(opacity: 0)
 
-    $image.stop().animate
-      opacity: 1
-    , 1000, 'easeOutQuad', ->
-      $images.children().first().remove()
+      $image.stop().animate
+        opacity: 1
+      , 1000, 'easeOutQuad', ->
+        $images.children().first().remove()
 
   $sampleImage = ->
     imageData = _.sample(imageDataList)
     $('<img>').prop(src: imageData.src, alt: imageData.alt)
 
-  $defaultImage = $sampleImage().hide()
-  $defaultImage.appendTo($images).fadeIn(1000)
 
-  setInterval ->
-    transitImage($sampleImage())
-  , 7000
+  $defaultImage = $sampleImage().hide()
+  $defaultImage.imagesLoaded ->
+    $defaultImage.appendTo($images).fadeIn(1000)
+
+    setInterval ->
+      transitImage($sampleImage())
+    , 7000
+
+  _.each imageDataList, (val) ->
+    $image = $('<img>').data(original: val.src).prop(alt: val.alt)
+    $image.appendTo($images).css(opacity: 0)
+
+  $images.children().lazyload()
