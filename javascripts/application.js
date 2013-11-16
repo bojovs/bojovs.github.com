@@ -1,9 +1,9 @@
 (function() {
+  var $images, transitImage;
+
   if ($('.home-index').length) {
-    setInterval(function() {
-      var $image, $images;
-      $images = $('.background .images');
-      $image = $images.find('img').last();
+    $images = $('.background .images');
+    transitImage = function($image) {
       return $image.animate({
         opacity: 0
       }, {
@@ -15,7 +15,16 @@
           });
         }
       });
-    }, 7000);
+    };
+    imagesLoaded($images, function() {
+      $images = $images.html(_.shuffle($images.find('img')));
+      $images.fadeIn(1000);
+      return setInterval(function() {
+        var $image;
+        $image = $images.find('img').last();
+        return transitImage($image);
+      }, 7000);
+    });
   }
 
 }).call(this);
