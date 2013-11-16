@@ -1,7 +1,7 @@
 if $('.home-index').length
   $images = $('.background .images')
 
-  imageData = [
+  imageDataList = [
    { src: '/images/background/image1.jpg', alt: '長野県 木崎湖キャンプ場のみずほ桟橋から撮影。' },
    { src: '/images/background/image2.jpg', alt: '長野県 木崎湖キャンプ場の方角を向いて撮影。' },
    { src: '/images/background/image6.jpg', alt: '長野県 木崎湖キャンプ場にて、みずほ桟橋といちご桟橋を撮影。' },
@@ -36,22 +36,21 @@ if $('.home-index').length
    { src: '/images/background/image42.jpg', alt: '広島県 竹原市から家に帰る途中。仰るとおりただの海だったけど、とてもきれいだった。' }
   ]
 
-  _.each _.shuffle(imageData), (val, key, list) ->
-    $img = $('<img>').data(original: val.src).prop(alt: val.alt)
-    $images.append($img)
-  
-  $images.find('img').lazyload()
-
   transitImage = ($image) ->
-    $image.animate
-      opacity: 0
-    ,
-      duration: 1000
-      easing: 'easeOutQuad'
-      complete: ->
-        $image.prependTo($images).css(opacity: 1)
+    $image.appendTo($images).css(opacity: 0)
+
+    $image.stop().animate
+      opacity: 1
+    , 1000, 'easeOutQuad', ->
+      $images.children().first().remove()
+
+  $sampleImage = ->
+    imageData = _.sample(imageDataList)
+    $('<img>').prop(src: imageData.src, alt: imageData.alt)
+
+  $defaultImage = $sampleImage().hide()
+  $defaultImage.appendTo($images).fadeIn(1000)
 
   setInterval ->
-    $image = $images.find('img').last()
-    transitImage($image)
+    transitImage($sampleImage())
   , 7000
