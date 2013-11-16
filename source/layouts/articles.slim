@@ -7,16 +7,6 @@
     nav.navbar.navbar-default role='navigation'
       .navbar-header
         a.navbar-brand href='/articles/' bojovs::blog
-      .collapse.navbar-collapse
-        ul.nav.navbar-nav
-          li.dropdown
-            a.dropdown-toggle href='#' data-toggle='dropdown'
-              | タグ
-              b.caret
-            ul.dropdown-menu role='menu'
-              - blog.tags.each do |tag, articles|
-                li
-                  = link_to "#{tag} (#{articles.size})", tag_path(tag)
 
     = yield
 
