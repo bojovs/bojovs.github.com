@@ -1,9 +1,9 @@
 (function() {
-  var $images, imageData, transitImage;
+  var $defaultImage, $images, $sampleImage, imageDataList, transitImage;
 
   if ($('.home-index').length) {
     $images = $('.background .images');
-    imageData = [
+    imageDataList = [
       {
         src: '/images/background/image1.jpg',
         alt: '長野県 木崎湖キャンプ場のみずほ桟橋から撮影。'
@@ -102,33 +102,28 @@
         alt: '広島県 竹原市から家に帰る途中。仰るとおりただの海だったけど、とてもきれいだった。'
       }
     ];
-    _.each(_.shuffle(imageData), function(val, key, list) {
-      var $img;
-      $img = $('<img>').data({
-        original: val.src
-      }).prop({
-        alt: val.alt
-      });
-      return $images.append($img);
-    });
-    $images.find('img').lazyload();
     transitImage = function($image) {
-      return $image.animate({
+      $image.appendTo($images).css({
         opacity: 0
-      }, {
-        duration: 1000,
-        easing: 'easeOutQuad',
-        complete: function() {
-          return $image.prependTo($images).css({
-            opacity: 1
-          });
-        }
+      });
+      return $image.stop().animate({
+        opacity: 1
+      }, 1000, 'easeOutQuad', function() {
+        return $images.children().first().remove();
       });
     };
+    $sampleImage = function() {
+      var imageData;
+      imageData = _.sample(imageDataList);
+      return $('<img>').prop({
+        src: imageData.src,
+        alt: imageData.alt
+      });
+    };
+    $defaultImage = $sampleImage().hide();
+    $defaultImage.appendTo($images).fadeIn(1000);
     setInterval(function() {
-      var $image;
-      $image = $images.find('img').last();
-      return transitImage($image);
+      return transitImage($sampleImage());
     }, 7000);
   }
 
