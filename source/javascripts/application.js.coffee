@@ -1,7 +1,7 @@
 if $('.home-index').length
-  setInterval ->
-    $images = $('.background .images')
-    $image = $images.find('img').last()
+  $images = $('.background .images')
+
+  transitImage = ($image) ->
     $image.animate
       opacity: 0
     ,
@@ -9,4 +9,12 @@ if $('.home-index').length
       easing: 'easeOutQuad'
       complete: ->
         $image.prependTo($images).css(opacity: 1)
-  , 7000
+
+  imagesLoaded $images, ->
+    $images = $images.html(_.shuffle($images.find('img')))
+    $images.fadeIn(1000)
+
+    setInterval ->
+      $image = $images.find('img').last()
+      transitImage($image)
+    , 7000
