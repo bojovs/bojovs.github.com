@@ -103,13 +103,15 @@
       }
     ];
     transitImage = function($image) {
-      $image.appendTo($images).css({
-        opacity: 0
-      });
-      return $image.stop().animate({
-        opacity: 1
-      }, 1000, 'easeOutQuad', function() {
-        return $images.children().first().remove();
+      return $image.imagesLoaded(function() {
+        $image.appendTo($images).css({
+          opacity: 0
+        });
+        return $image.stop().animate({
+          opacity: 1
+        }, 1000, 'easeOutQuad', function() {
+          return $images.children().first().remove();
+        });
       });
     };
     $sampleImage = function() {
@@ -121,10 +123,24 @@
       });
     };
     $defaultImage = $sampleImage().hide();
-    $defaultImage.appendTo($images).fadeIn(1000);
-    setInterval(function() {
-      return transitImage($sampleImage());
-    }, 7000);
+    $defaultImage.imagesLoaded(function() {
+      $defaultImage.appendTo($images).fadeIn(1000);
+      return setInterval(function() {
+        return transitImage($sampleImage());
+      }, 7000);
+    });
+    _.each(imageDataList, function(val) {
+      var $image;
+      $image = $('<img>').data({
+        original: val.src
+      }).prop({
+        alt: val.alt
+      });
+      return $image.appendTo($images).css({
+        opacity: 0
+      });
+    });
+    $images.children().lazyload();
   }
 
 }).call(this);
