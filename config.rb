@@ -35,9 +35,6 @@
 # Automatic image dimensions on image_tag helper
 # activate :automatic_image_sizes
 
-# Reload the browser automatically whenever files change
-# activate :livereload
-
 # Methods defined in the helpers block are available in templates
 # helpers do
 #   def some_helper
@@ -46,8 +43,10 @@
 # end
 
 set :css_dir, 'stylesheets'
-set :js_dir, 'javascripts'
 set :images_dir, 'images'
+set :js_dir, 'javascripts'
+set :markdown_engine, :redcarpet
+set :markdown, fenced_code_blocks: true, smartypants: true, autolink: true
 set :slim, { ugly: true, format: :html5 }
 
 # Build-specific configuration

@@ -1,0 +1,6 @@
+- content_for :stylesheets do
+  = stylesheet_link_tag 'home'
+
+- wrap_layout :base do
+  .home
+    = yield

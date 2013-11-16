@@ -1,20 +1,11 @@
 ---
-layout: articles
+layout: articles_index
 ---
 
-h1 記事タイトル
 ul.posts
   - blog.articles[0...5].each do |article|
     li
       span.datetime
         = article.date.strftime('%Y/%m/%d')
       .title
-        a href='<%= article.url %>'
-          = article.title
-
-h2 Tags
-ol
-  - blog.tags.each do |tag, articles|
-    li
-      = link_to tag, tag_path(tag)
-      = " (#{articles.size})"
+        = link_to article.title, article.url

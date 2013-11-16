@@ -1,0 +1,14 @@
+.articles-index {
+  ul.posts {
+    -webkit-padding-start: 0;
+    list-style-type: none;
+
+    li {
+      margin-bottom: 25px;
+      .datetime {
+        display: inline-block;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

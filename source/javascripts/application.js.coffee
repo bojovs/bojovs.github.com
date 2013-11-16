@@ -1,4 +1,4 @@
-if $('.index').length
+if $('.home-index').length
   setInterval ->
     $images = $('.background .images')
     $image = $images.find('img').last()

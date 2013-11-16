@@ -1,0 +1,8 @@
+- wrap_layout :articles do
+  .articles-show
+    .container
+      article.row
+        .col-sm-6.col-sm-offset-3
+          = yield
+          hr.article-end
+          = partial 'disqus'

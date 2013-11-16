@@ -1,0 +1,33 @@
+.articles-show {
+  article {
+    line-height: 20px;
+
+    h1, h2 {
+      font-weight: bold;
+      margin: 25px 0;
+    }
+
+    code, ol, p, ul {
+      font-size: 13px;
+    }
+
+    p {
+      margin: 17px 0;
+    }
+
+    pre {
+      background-color: #fffffc;
+      color: #647b82;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: 'Droid Sans Mono', Consolas, Courier, monospace;
+    }
+
+    hr.article-end {
+      margin: 30px 0;
+    }
+  }
+}

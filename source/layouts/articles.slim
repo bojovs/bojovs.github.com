@@ -1,3 +1,25 @@
+- content_for :stylesheets do
+  link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' media='screen' rel='stylesheet' type='text/css'
+  = stylesheet_link_tag 'articles'
+
 - wrap_layout :base do
-  .container
+  .articles
+    nav.navbar.navbar-default role='navigation'
+      .navbar-header
+        a.navbar-brand href='/articles/' bojovs::blog
+      .collapse.navbar-collapse
+        ul.nav.navbar-nav
+          li.dropdown
+            a.dropdown-toggle href='#' data-toggle='dropdown'
+              | タグ
+              b.caret
+            ul.dropdown-menu role='menu'
+              - blog.tags.each do |tag, articles|
+                li
+                  = link_to "#{tag} (#{articles.size})", tag_path(tag)
+
     = yield
+
+    hr
+    footer
+      p.text-center bojovs.com
