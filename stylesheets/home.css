@@ -7,9 +7,6 @@
   position: fixed;
   width: 200%; }
   /* line 11, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
-  .home-index .background .images {
-    display: none; }
-  /* line 15, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
   .home-index .background img, .home-index .background .image-filter {
     left: 0;
     margin: auto;
@@ -17,35 +14,35 @@
     min-width: 50%;
     right: 0;
     top: 0; }
-  /* line 24, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+  /* line 20, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
   .home-index .background img {
     display: block;
     position: absolute; }
-  /* line 29, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+  /* line 25, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
   .home-index .background .image-filter {
     background-color: #000000;
     opacity: 0.5;
     position: absolute; }
-/* line 36, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+/* line 32, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
 .home-index .content {
   position: absolute;
   top: 50%;
   width: 900px; }
-  /* line 41, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+  /* line 37, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
   .home-index .content h1 {
     color: #ffffff;
     font-family: 'Lustria', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 80px;
     margin-bottom: 20px; }
-  /* line 48, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+  /* line 44, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
   .home-index .content ul {
     list-style-type: none;
     padding: 0; }
-    /* line 52, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+    /* line 48, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
     .home-index .content ul li {
       display: inline-block;
       margin-right: 10px; }
-      /* line 56, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+      /* line 52, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
       .home-index .content ul li a {
         border: solid 1px #ffffff;
         border-radius: 25px;
@@ -56,22 +53,22 @@
         line-height: 50px;
         text-decoration: none;
         width: 50px; }
-        /* line 67, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+        /* line 63, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
         .home-index .content ul li a:hover {
           background-color: #ffffff;
           color: #428bca; }
 @media screen and (max-width: 320px) {
-  /* line 77, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+  /* line 73, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
   .home-index .content {
     width: 320px; }
-    /* line 80, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+    /* line 76, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
     .home-index .content h1 {
       font-size: 40px; }
-    /* line 85, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+    /* line 81, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
     .home-index .content ul li {
       margin: 0 5px;
       margin-right: 0; }
-      /* line 89, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
+      /* line 85, /Users/bojovs/repos/bojovs.github.com/source/stylesheets/home.css.scss */
       .home-index .content ul li a {
         border-radius: 25px;
         font-size: 15px;
