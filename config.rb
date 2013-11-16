@@ -68,7 +68,7 @@ configure :build do
 end
 
 activate :blog do |blog|
-  blog.permalink = ':year/:month/:day/:title/'
+  blog.permalink = ':year/:month/:day/:title'
   blog.taglink = 'tags/:tag/'
   blog.tag_template = 'tag.html'
 end
