@@ -1,11 +1,12 @@
 ---
-layout: article
+layout: articles_show
 title: VowsとZombie.jsでExpress, MongooseなNode.jsアプリのテストを書いたよ
 tags: [testing, vows, zombie.js]
 ---
 
-環境
-------
+# VowsとZombie.jsでExpress, MongooseなNode.jsアプリのテストを書いたよ
+
+## 環境
 
 * Node.js 0.4.9
 * [Express](http://expressjs.com/) 2.4.6
@@ -15,14 +16,13 @@ tags: [testing, vows, zombie.js]
 * [request](https://github.com/mikeal/request) 2.1.1
 
 
-流れ
-------
+## 流れ
 
 最初に、モデル内のドキュメントを削除するコードと、サーバを起動するコードを記述します。
 
 **test/helper.js**
 
-{% highlight javascript linenos %}
+```
 var mongoose = require('mongoose')
   , app = require('../app')
   , Post    = require('../models/post').Post
@@ -73,14 +73,14 @@ module.exports = {
     return;
   }
 };
-{% endhighlight %}
+```
 
 
 次に、実際にテストを書いていきます。
 
 **test/controllers/posts.test.js**
 
-{% highlight javascript linenos %}
+```
 var assert  = require('assert')
   , request = require('request')
   , vows    = require('vows')
@@ -131,7 +131,7 @@ vows.describe('posts').addBatch({
     }
   }
 }).export(module);
-{% endhighlight %}
+```
 
 12行目から24行目までは、
 
@@ -149,9 +149,9 @@ vows.describe('posts').addBatch({
 
 という処理になっています。
 
-Vowsでは、`topic`という関数の中で`this.callback`という関数を使うことができます。
-この関数を、`helper.initDB`や`helper.readyServer`などのコールバック関数を引数に持つ関数に渡し、
-その下にさらに`topic`関数をネストして記述することで、非同期的な命令を順番に処理させることができるようです。
+Vowsでは、`topic` という関数の中で `this.callback` という関数を使うことができます。
+この関数を、`helper.initDB` や `helper.readyServer` などのコールバック関数を引数に持つ関数に渡し、
+その下にさらに `topic` 関数をネストして記述することで、非同期的な命令を順番に処理させることができるようです。
 
 ただ、結構冗長なコードになっているので、もう少し簡潔に書けないかなあと思っています。
 みんなはどうしているんだろう…。
