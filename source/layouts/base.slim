@@ -1,0 +1,21 @@
+doctype 5
+html lang='ja'
+  head
+    meta charset='utf-8'
+    meta name='viewport' content='width=device-width, initial-scale=1.0'
+    title bojovs.com
+    link rel='alternate' type='application/atom+xml' href='http://feeds.feedburner.com/bojovs'
+    link rel='canonical' href='http://bojovs.github.com{{ page.url }}'
+    link href='/favicon.png' rel='shortcut icon'
+    = stylesheet_link_tag 'lib/bootstrap.min'
+    = stylesheet_link_tag 'lib/bootstrap-theme.min'
+    = stylesheet_link_tag 'lib/font-awesome.min'
+    = stylesheet_link_tag 'home'
+  body class="#{page_classes}"
+    = yield
+
+    = partial 'ga'
+
+    = javascript_include_tag 'lib/jquery.min'
+    = javascript_include_tag 'lib/jquery.easing'
+    = javascript_include_tag 'application'

@@ -46,10 +46,9 @@
 # end
 
 set :css_dir, 'stylesheets'
-
 set :js_dir, 'javascripts'
-
 set :images_dir, 'images'
+set :slim, { ugly: true, format: :html5 }
 
 # Build-specific configuration
 configure :build do
