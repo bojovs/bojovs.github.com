@@ -47,7 +47,7 @@ set :images_dir, 'images'
 set :js_dir, 'javascripts'
 set :markdown_engine, :redcarpet
 set :markdown, fenced_code_blocks: true, smartypants: true, autolink: true
-set :slim, { ugly: true, format: :html5 }
+set :slim, { format: :html5 }
 
 # Build-specific configuration
 configure :build do
